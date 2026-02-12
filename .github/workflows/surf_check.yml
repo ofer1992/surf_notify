@@ -1,0 +1,23 @@
+name: Surf Forecast Check
+
+on:
+  schedule:
+    # 6am Israel time (IST = UTC+2, no DST currently; IDT = UTC+3 in summer)
+    # Using 04:00 UTC covers the winter case (6am IST)
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Run surf check
+        env:
+          PUSHOVER_USER_KEY: ${{ secrets.PUSHOVER_USER_KEY }}
+          PUSHOVER_API_TOKEN: ${{ secrets.PUSHOVER_API_TOKEN }}
+        run: uv run notify.py
