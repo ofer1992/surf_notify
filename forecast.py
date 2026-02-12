@@ -71,3 +71,14 @@ def degree_to_compass(deg: float) -> str:
         "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW",
     ]
     return dirs[round(deg / 22.5) % 16]
+
+
+def degree_to_arrow(deg: float) -> str:
+    """Convert wind 'from' direction to an arrow showing where wind blows TO.
+
+    Wind from north (0°) blows southward → ↓
+    Wind from south (180°) blows northward → ↑
+    """
+    # 8 arrows, each covering 45°. Offset by 180° since arrows show destination.
+    arrows = ["↓", "↙", "←", "↖", "↑", "↗", "→", "↘"]
+    return arrows[round(deg / 45) % 8]

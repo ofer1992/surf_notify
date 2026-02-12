@@ -13,7 +13,7 @@ import os
 import sys
 from datetime import datetime, timedelta, timezone
 
-from forecast import fetch_forecast, degree_to_compass
+from forecast import fetch_forecast, degree_to_compass, degree_to_arrow
 from chart import generate_chart
 
 # Surfable thresholds
@@ -122,12 +122,12 @@ def format_message(windows: list[dict], best: dict) -> str:
     daytime = [w for w in windows if w["datetime"].hour not in NIGHT_HOURS]
     for w in daytime:
         dt = w["datetime"].strftime("%a %d/%m %H:%M")
-        wind_dir = degree_to_compass(w["wind_direction"])
+        wind_arrow = degree_to_arrow(w["wind_direction"])
         stars = rate_slot(w)
         star_str = "\u2605" * stars + "\u2606" * (5 - stars)
         best_mark = " \u2b50" if w is best else ""
         lines.append(f"{star_str} {dt}{best_mark}")
-        lines.append(f"  {w['wave_height_m']:.1f}m  {w['wave_period_sec']:.0f}s  {w['wind_speed_knots']:.0f}kt {wind_dir}")
+        lines.append(f"  {w['wave_height_m']:.1f}m  {w['wave_period_sec']:.0f}s  {w['wind_speed_knots']:.0f}kt {wind_arrow}")
 
     best_dt = best["datetime"].strftime("%a %d/%m %H:%M")
     lines.append(
