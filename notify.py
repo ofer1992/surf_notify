@@ -174,7 +174,8 @@ def main():
         print("No surfable windows found. Exiting.")
         return
 
-    best = find_best_window(windows)
+    daytime_windows = [w for w in windows if w["datetime"].hour not in NIGHT_HOURS]
+    best = find_best_window(daytime_windows if daytime_windows else windows)
     message = format_message(windows, best)
 
     print("Generating chart...")
