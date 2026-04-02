@@ -108,14 +108,12 @@ def find_best_window(windows: list[dict]) -> dict:
 
 def format_message(windows: list[dict], best: dict) -> str:
     """Build the notification message text."""
-    peak = max(windows, key=lambda w: w["wave_height_m"])
-    peak_dt = peak["datetime"].strftime("%a %d/%m %H:%M")
-    direction = degree_to_compass(peak["wave_direction"])
+    best_dt = best["datetime"].strftime("%a %d/%m %H:%M")
 
     lines = [
         "\U0001f3c4 Surf Alert \u2014 Tel Aviv\n",
-        f"Peak: {peak['wave_height_m']:.1f}m @ {peak['wave_period_sec']:.0f}s on {peak_dt}",
-        f"Direction: {direction} ({peak['wave_direction']:.0f}\u00b0)\n",
+        f"Best window: {best_dt} \u2014 {best['wave_height_m']:.1f}m "
+        f"@ {best['wave_period_sec']:.0f}s, wind {best['wind_speed_knots']:.0f}kt\n",
         f"Surfable windows (next {MAX_DAYS} days):",
     ]
 
@@ -128,12 +126,6 @@ def format_message(windows: list[dict], best: dict) -> str:
         best_mark = " \u2b50" if w is best else ""
         lines.append(f"{star_str} {dt}{best_mark}")
         lines.append(f"  {w['wave_height_m']:.1f}m  {w['wave_period_sec']:.0f}s  {w['wind_speed_knots']:.0f}kt {wind_arrow}")
-
-    best_dt = best["datetime"].strftime("%a %d/%m %H:%M")
-    lines.append(
-        f"\nBest window: {best_dt} \u2014 {best['wave_height_m']:.1f}m "
-        f"@ {best['wave_period_sec']:.0f}s, wind {best['wind_speed_knots']:.0f}kt"
-    )
 
     return "\n".join(lines)
 
